@@ -1,31 +1,31 @@
 'use client';
-
 import { useState } from 'react';
+import styles from './NovaTarefa.module.css';
 
-interface NovaTarefaProps {
-    onAddTarefa: (texto: string) => void;
-}
-
-export default function NovaTarefa({ onAddTarefa }: NovaTarefaProps) {
+export default function NovaTarefa({
+    onAddTarefa,
+}: {
+    onAddTarefa: (t: string) => void;
+}) {
     const [texto, setTexto] = useState('');
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!texto.trim()) return;
-
-        onAddTarefa(texto);
-        setTexto('');
-    };
-
     return (
-        <form onSubmit={handleSubmit} data-testid="form-nova-tarefa">
+        <form
+            className={styles.form}
+            onSubmit={(e) => {
+                e.preventDefault();
+                onAddTarefa(texto);
+                setTexto('');
+            }}
+        >
             <input
-                type="text"
-                placeholder="Digite uma nova tarefa"
+                className={styles.input}
                 value={texto}
                 onChange={(e) => setTexto(e.target.value)}
+                placeholder="Nova tarefa"
             />
-            <button type="submit">Adicionar</button>
+            <button className={styles.button} type="submit">
+                Adicionar
+            </button>
         </form>
     );
 }

@@ -1,36 +1,30 @@
 'use client';
-
 import { useState } from 'react';
 import NovaTarefa from './NovaTarefa';
 import { useContadorDeTarefas } from '../hooks/useContadorDeTarefas';
-
-interface Tarefa {
-    id: number;
-    texto: string;
-}
+import styles from './ListaTarefas.module.css';
 
 export default function ListaTarefas({
     tarefasIniciais,
 }: {
-    tarefasIniciais: Tarefa[];
+    tarefasIniciais: any[];
 }) {
-    const [tarefas, setTarefas] = useState<Tarefa[]>(tarefasIniciais);
-    const totalTarefas = useContadorDeTarefas(tarefas);
-
-    const handleAddTarefa = (texto: string) => {
-        const nova = { id: Date.now(), texto };
-        setTarefas((prev) => [...prev, nova]);
-    };
+    const [tarefas, setTarefas] = useState(tarefasIniciais);
+    const total = useContadorDeTarefas(tarefas);
 
     return (
         <div>
-            <p data-testid="contador">Total de tarefas: {totalTarefas}</p>
-
-            <NovaTarefa onAddTarefa={handleAddTarefa} />
-
-            <ul data-testid="lista-tarefas">
+            <p className={styles.contador}>Total: {total}</p>
+            <NovaTarefa
+                onAddTarefa={(texto) =>
+                    setTarefas([...tarefas, { id: Date.now(), texto }])
+                }
+            />
+            <ul className={styles.lista}>
                 {tarefas.map((t) => (
-                    <li key={t.id}>{t.texto}</li>
+                    <li key={t.id} className={styles.item}>
+                        {t.texto}
+                    </li>
                 ))}
             </ul>
         </div>
